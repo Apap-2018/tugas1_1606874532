@@ -8,10 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.hibernate.dialect.*;
 
 import com.apap.tugas1.model.JabatanPegawaiModel;
 import com.apap.tugas1.model.PegawaiModel;
-import com.apap.tugas1.service.InstansiService;
 import com.apap.tugas1.service.JabatanPegawaiService;
 import com.apap.tugas1.service.JabatanService;
 import com.apap.tugas1.service.PegawaiService;
@@ -24,8 +24,7 @@ public class PegawaiController {
     private JabatanPegawaiService jabatanPegawaiService;
     @Autowired
     private JabatanService jabatanService;
-    @Autowired
-    private InstansiService instansiService;
+    
 
     @RequestMapping("/")
     private String index(Model model) {
@@ -66,13 +65,5 @@ public class PegawaiController {
         return "viewPegawaiTertuaTermuda";
     }
 
-    @GetMapping(value = ("/pegawai/tambah"))
-    private String addPegawaiGet(Model model){
-        return "index";
-    }
-
-    @PostMapping(value = ("pegawai/tambah"))
-    private String addPegawaiPost(ModelAttribute pegawaiModel ){
-        return "index";
     }*/
 }

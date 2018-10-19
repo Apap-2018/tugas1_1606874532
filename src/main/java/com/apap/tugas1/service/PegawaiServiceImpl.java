@@ -20,7 +20,7 @@ public class PegawaiServiceImpl {
     @Autowired
     private PegawaiDb PegawaiDb;
 
-    //@Override
+    /*@Override*/
     public PegawaiModel getPegawaiDetailByNip(String nip) {
         return PegawaiDb.findByNip(nip);
     }
@@ -29,7 +29,8 @@ public class PegawaiServiceImpl {
         return PegawaiDb.findById(id);
     }
     
-    //@Override
+    
+    /*@Override*/
     public void addPegawai(PegawaiModel pegawai){
         PegawaiDb.save(pegawai);
     }
@@ -39,8 +40,8 @@ public class PegawaiServiceImpl {
         return PegawaiDb.findAll();
     }*/
     
-    //Override
-    public void deletePegawai(PegawaiModel pegawai) {
+    //@Autowired
+	public void deletePegawai(PegawaiModel pegawai) {
     	PegawaiDb.save(pegawai);
     }
 
@@ -65,7 +66,7 @@ public class PegawaiServiceImpl {
 		
 	}    
     
-/*    //@Override
+    //@Override
     public double getGajiLengkapByNip(String nip) {
         double gajiLengkap = 0;
         
@@ -84,7 +85,7 @@ public class PegawaiServiceImpl {
         gajiLengkap += (gajiLengkap * presentaseTunjangan/100);
         System.out.println("Lengkap: " + gajiLengkap);
         return gajiLengkap;
-    }*/
+    }
 
     //@Override
     public List<PegawaiModel> findByInstansiOrderByTanggalLahirAsc(InstansiModel instansi){

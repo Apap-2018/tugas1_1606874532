@@ -39,4 +39,29 @@ public class JabatanController {
 		model.addAttribute("jabatan", jabatan);
 		return "view-jabatan";
 	}
+	
+	@RequestMapping(value="/jabatan/ubah", method=RequestMethod.GET)
+	public String changeJabatan(@RequestParam(value = "idJabatan") Long idJabatan, Model model) {
+		JabatanModel jabatan = jabatanService.getJabatanById(idJabatan);
+		model.addAttribute("jabatan", jabatan);
+		return "update-jabatan";
+	}
+	
+	@RequestMapping(value="/jabatan/ubah", method=RequestMethod.POST)
+	private String changeJabatanSubmit(@ModelAttribute JabatanModel jabatan) {
+		jabatanService.updateJabatan(jabatan.getId(),jabatan);
+		return "save-data";
+	}
+	
+	@RequestMapping(value="/jabatan/hapus", method=RequestMethod.POST)
+	private String deleteJabatan(@ModelAttribute JabatanModel jabatan, Model model) throws Exception{
+		try {
+			jabatanService.deleteJabatanById(jabatan.getId());
+			model.addAttribute("message","hapus");
+			return "delete-jabatan";
+		}catch (Exception e) {
+			model.addAttribute("jabatan",jabatanService.getJabatanById(jabatan.getId()));
+			return "view-jabatan";
+		}
+	}
 }
