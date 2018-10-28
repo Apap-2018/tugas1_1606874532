@@ -13,17 +13,17 @@ import com.apap.tugas1.repository.JabatanPegawaiDb;
 
 @Service
 @Transactional
-public class JabatanPegawaiServiceImpl {
+public class JabatanPegawaiServiceImpl implements JabatanPegawaiService{
     @Autowired
-    private JabatanPegawaiDb jabatanPegawaiDB;
+    private JabatanPegawaiDb jabatanPegawaiDb;
 
-/*    @Override
+    @Override
     public Optional<List<JabatanPegawaiModel>> getJabatanByPegawaiId(String nip) {
-        return JabatanPegawaiDb.findAllByPegawai_Nip(nip);
+        return jabatanPegawaiDb.findAllByPegawai_Nip(nip);
     }
 
     @Override
-    public List<jabatanPegawaiModel> findAllByJabatan_Id(Long id){
-        return JabatanPegawaiDb.findAllByJabatan_Id(id);
-    }*/
+    public List<JabatanPegawaiModel> findAllByJabatan_Id(Long id){
+        return jabatanPegawaiDb.findAllByJabatan_Id(id);
+    }
 }

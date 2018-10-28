@@ -1,49 +1,45 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-	<title>Jabatan</title>
-<!-- 	<object th:include="fragments/fragment :: css" th:remove="tag"></object>
-	<object th:include="fragments/fragment :: js" th:remove="tag"></object> -->
+    <title th:replace="fragments/fragment :: headerFragment('View Jabatan')"></title>
+    <object th:include="fragments/fragment :: css" th:remove="tag"></object>
+    <object th:include="fragments/fragment :: js" th:remove="tag"></object>
 </head>
-
 <body>
-<!-- 	<nav th:replace="fragments/fragment :: navbar"></nav> -->
-	<div class="container-fluid">
-		<div class="col-md-8">
-			<br>
-			<h2 th:text=" 'Detail Jabatan ' + ${jabatan.nama}"></h2>
-			<br>
-			<table class="table">
-				<tbody>
-					<tr>
-						<td th:text="'Nama'"></td>
-						<td th:text="${jabatan.nama}"></td>
-					</tr>
-					<tr>
-						<td th:text="'Deskripsi'"></td>
-						<td th:text="${jabatan.deskripsi}"></td>
-					</tr>
-					<tr>
-						<td th:text="'Gaji Pokok'"></td>
-						<td th:text="${jabatan.gajiPokok}"></td>
-					</tr>
-				</tbody>		
-			</table>			
-			</div>
+<nav th:replace="fragments/fragment :: navbar"></nav>
 
-	</div>
-	
-	<form th:action="@{/jabatan/ubah}" th:object="${jabatan}" method ="GET">
-		<input type="hidden" th:value="${jabatan.id}" name="idJabatan"></input>
-		<button type="submit" class="btn btn-primary">Ubah</button>
-	</form>
-	
-	<form th:action="@{/jabatan/hapus}" th:object="${jabatan}" method="POST">
-          <input type="hidden" th:field="*{id}" />
-           <button type="submit" class="btn btn-danger">Hapus</button>
-     </form>
+<h1>Detail Jabatan</h1>
+<table class="table">
+    <tr>
+        <td>Nama</td>
+        <td th:text="${jabatan.nama}"></td>
+    </tr>
+    <tr>
+        <td>Deskripsi</td>
+        <td th:text="${jabatan.deskripsi}"></td>
+    </tr>
+    <tr>
+        <td>Gaji Pokok</td>
+        <td th:text="'Rp ' + ${jabatan.gajiPokok}"></td>
+    </tr>
+</table>
+
+<!-- Two buttons in a group -->
+<div class="btn-group" style="width:20%">
+<hr>
+<form th:action="@{'/jabatan/ubah'}" >
+    <input type="hidden" name="idJabatan" th:value="${jabatan.id}" />
+    <button value="submit" class="btn btn-primary">Ubah</button>
+<!--     <button value="submit" class="btn btn-primary btn-block" style="align-content: center">Ubah</button> -->
+</form>
+<hr>
+<form th:action="@{'/jabatan/hapus'}" th:method="POST" >
+    <input type="hidden" name="id" th:value="${jabatan.id}" />
+    <button value="submit" class="btn btn-danger btn-primary">Hapus</button>
+<!--     <button value="submit" class="btn btn-danger btn-block">Hapus</button> -->
+</form>
+<hr>
+</div>
 
 </body>
-
 </html>

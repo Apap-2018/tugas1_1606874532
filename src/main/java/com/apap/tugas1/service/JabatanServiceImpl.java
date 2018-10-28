@@ -17,39 +17,31 @@ import com.apap.tugas1.repository.JabatanPegawaiDb;
 public class JabatanServiceImpl implements JabatanService{
     @Autowired
     private JabatanDb jabatanDb;
+    @Autowired
+    private JabatanPegawaiDb jabatanPegawaiDb;
     
-    /*@Autowired
-    private JabatanPegawaiDb jabatanPegawaiDB;
-*/
-    public List<JabatanModel> getListJabatan(){
-    	return jabatanDb.findAll();
+    public void addJabatan(JabatanModel jabatan){
+        jabatanDb.save(jabatan);
     }
     
-    public JabatanModel getJabatanById(Long id){
-        return jabatanDb.getOne(id);
+    public Optional<JabatanModel> getJabatanById(Long id){
+        return jabatanDb.findById(id);
     }
+    
+    public void deleteJabatan(JabatanModel jabatan){
+        jabatanDb.deleteById(jabatan.getId());
+    }    
 
     public void updateJabatan(Long id, JabatanModel jabatan){
         JabatanModel jabatanUpdated = jabatanDb.getOne(id);
         jabatanUpdated.setDeskripsi(jabatan.getDeskripsi());
         jabatanUpdated.setGajiPokok(jabatan.getGajiPokok());
+        jabatanUpdated.setId(jabatan.getId());
         jabatanUpdated.setNama(jabatan.getNama());
         jabatanDb.save(jabatanUpdated);
     }
 
-    public void addJabatan(JabatanModel jabatan){
-        jabatanDb.save(jabatan);
+    public List<JabatanModel> getAll(){
+        return jabatanDb.findAll();
     }
-    
-    public void deleteJabatanById(Long id) {
-    	jabatanDb.deleteById(id);
-    }
-
-/*    public void deleteJabatan(JabatanModel jabatan){
-        JabatanDb.deleteById(jabatan.getId());
-    }
-*/
-  /*  public List<JabatanModel> getAll(){
-        return JabatanDb.findAll();
-    }*/
 }

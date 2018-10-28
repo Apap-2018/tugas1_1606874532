@@ -36,7 +36,7 @@ public class JabatanModel implements Serializable{
     @Column(name = "gaji_pokok", nullable = false)
     private double gajiPokok;
 
-    @ManyToMany(fetch = FetchType.LAZY,
+    @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
@@ -84,25 +84,15 @@ public class JabatanModel implements Serializable{
 		this.pegawaiList = pegawaiList;
 	}
 	
-/*	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String id;
-	
-	@NotNull
-	@Column(name ="nama", nullable = false)
-	private String nama;
-	
-	@NotNull
-	@Column(name ="deskripsi", nullable = false)
-	private String deskripsi;
-	
-	@NotNull
-	@Column(name ="gaji_pokok", nullable = false)
-	private int gaji_pokok;
-	
-	@OneToMany(mappedBy = "jabatan", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-	private List<PegawaiModel> listPegawai;
+/*	@ManyToMany(fetch = FetchType.EAGER,
+			cascade = {
+					CascadeType.PERSIST,
+					CascadeType.MERGE
+			},
+			mappedBy = "jabatanList")
+		private List<PegawaiModel> pegawaiList;
 
-*/	
-
+		public void setPegawaiList(List<PegawaiModel> pegawaiList) {
+			this.pegawaiList = pegawaiList;
+		}*/
 }

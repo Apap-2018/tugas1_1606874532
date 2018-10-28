@@ -2,6 +2,8 @@ package com.apap.tugas1.model;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -71,6 +73,36 @@ public class PegawaiModel implements Serializable{
             inverseJoinColumns = { @JoinColumn(name = "id_jabatan") })
     private List<JabatanModel> jabatanList;
 
+	public double getGaji() {
+		double gajiUtama = 0;
+		double tunjangan = this.instansi.getProvinsi().getPresentaseTunjangan();
+		if (jabatanList.size()>1) {
+			JabatanModel max = Collections.max(jabatanList, pegawaiComparator);
+			gajiUtama = max.getGajiPokok() + ((tunjangan / 100) * max.getGajiPokok());
+		}
+		else {
+			gajiUtama = jabatanList.get(0).getGajiPokok() + (tunjangan * jabatanList.get(0).getGajiPokok());
+		}
+		return gajiUtama;
+		
+		
+	}
+	
+	private static Comparator<JabatanModel> pegawaiComparator = new Comparator<JabatanModel>() {
+
+		@Override
+		
+		public int compare(JabatanModel a, JabatanModel b) {
+			if (a.getGajiPokok()<b.getGajiPokok()) {
+				return -1;
+			}
+			else if (a.getGajiPokok()>b.getGajiPokok()) {
+				return 1;
+			}
+			return 0;
+		}
+	};
+    
 	public long getId() {
 		return id;
 	}

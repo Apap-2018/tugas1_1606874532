@@ -1,67 +1,82 @@
 package com.apap.tugas1.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.hibernate.dialect.*;
 
 import com.apap.tugas1.model.JabatanModel;
-import com.apap.tugas1.repository.JabatanDb;
+import com.apap.tugas1.model.JabatanPegawaiModel;
+import com.apap.tugas1.service.JabatanPegawaiService;
 import com.apap.tugas1.service.JabatanService;
 
 @Controller
 public class JabatanController {
-	@Autowired
-	private JabatanService jabatanService;
-	
-	@Autowired
-	private JabatanDb jabatanDb;
-	
-	@RequestMapping(value = "/jabatan/tambah", method = RequestMethod.GET)
-	private String pageAddJabatan(Model model) {
-		model.addAttribute("jabatan", new JabatanModel());
-		return "add-jabatan";
-	}
-	
-	@RequestMapping(value = "/jabatan/tambah", method = RequestMethod.POST)
-	private String addJabatan(@ModelAttribute JabatanModel jabatan){
-		jabatanService.addJabatan(jabatan);
-		return "save-data";
-	}
-	
-	@RequestMapping(value= "/jabatan/view", method = RequestMethod.GET)
-	private String viewJabatan(@RequestParam(value="idJabatan") Long idJabatan, Model model) {
-		JabatanModel jabatan = jabatanService.getJabatanById(idJabatan);
-		model.addAttribute("jabatan", jabatan);
-		return "view-jabatan";
-	}
-	
-	@RequestMapping(value="/jabatan/ubah", method=RequestMethod.GET)
-	public String changeJabatan(@RequestParam(value = "idJabatan") Long idJabatan, Model model) {
-		JabatanModel jabatan = jabatanService.getJabatanById(idJabatan);
-		model.addAttribute("jabatan", jabatan);
-		return "update-jabatan";
-	}
-	
-	@RequestMapping(value="/jabatan/ubah", method=RequestMethod.POST)
-	private String changeJabatanSubmit(@ModelAttribute JabatanModel jabatan) {
-		jabatanService.updateJabatan(jabatan.getId(),jabatan);
-		return "save-data";
-	}
-	
-	@RequestMapping(value="/jabatan/hapus", method=RequestMethod.POST)
-	private String deleteJabatan(@ModelAttribute JabatanModel jabatan, Model model) throws Exception{
-		try {
-			jabatanService.deleteJabatanById(jabatan.getId());
-			model.addAttribute("message","hapus");
-			return "delete-jabatan";
-		}catch (Exception e) {
-			model.addAttribute("jabatan",jabatanService.getJabatanById(jabatan.getId()));
-			return "view-jabatan";
-		}
-	}
+    @Autowired
+    private JabatanService jabatanService;
+    @Autowired
+    private JabatanPegawaiService jabatanPegawaiService;
+
+
+    @GetMapping(value = "/jabatan/tambah")
+    private String tambahJabatan(Model model){
+        JabatanModel jabatan = new JabatanModel();
+        return "add-jabatan";
+    }
+
+    @PostMapping(value = "/jabatan/tambah")
+    private String tambahJabatanDone(@ModelAttribute JabatanModel jabatan, Model model){
+        jabatanService.addJabatan(jabatan);
+        model.addAttribute("jabatan", jabatan);
+        return "addJabatanDone";
+    }
+
+    @GetMapping(value = "/jabatan/view")
+    private String lihatJabatan(@RequestParam(value="idJabatan") Long id, Model model) {
+        JabatanModel jabatan = jabatanService.getJabatanById(id).get();
+        model.addAttribute("jabatan", jabatan);
+        return "view-jabatan";
+    }
+
+    @GetMapping(value = "/jabatan/ubah")
+    private String ubahJabatan(@RequestParam(value = "idJabatan") String id, Model model){
+        JabatanModel jabatan = jabatanService.getJabatanById(Long.parseLong(id)).get();
+        model.addAttribute("jabatan", jabatan);
+        return "update-jabatan";
+    }
+
+    @PostMapping(value = "/jabatan/ubah")
+    private String ubahJabatanDone(@ModelAttribute JabatanModel jabatan, Model model){
+        Long id = jabatan.getId();
+        jabatanService.updateJabatan(id, jabatan);
+        model.addAttribute("jabatan", jabatan);
+        return "updateJabatanDone";
+    }
+
+    @PostMapping (value = "/jabatan/hapus")
+    private String hapusJabatan(@ModelAttribute JabatanModel jabatan, Model model){
+        List<JabatanPegawaiModel> listJapPeg = jabatanPegawaiService.findAllByJabatan_Id(jabatan.getId());
+        if (listJapPeg.isEmpty()){
+            jabatanService.deleteJabatan(jabatan);
+            model.addAttribute("jabatan", jabatan);
+            return "deleteJabatanDone";
+        }
+        else {
+            model.addAttribute("jabatan",jabatan);
+            return "deleteJabatanWarning";
+        }
+    }
+
+    @GetMapping(value = "/jabatan/viewall")
+    private String viewAll(Model model){
+        List<JabatanModel> semuaJabatan = jabatanService.getAll();
+        model.addAttribute("allJabatan", semuaJabatan);
+        return "view-all";
+    }
+
 }

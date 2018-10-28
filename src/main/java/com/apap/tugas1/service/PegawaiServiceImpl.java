@@ -9,89 +9,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apap.tugas1.model.InstansiModel;
-import com.apap.tugas1.model.JabatanModel;
 import com.apap.tugas1.model.PegawaiModel;
-import com.apap.tugas1.model.ProvinsiModel;
 import com.apap.tugas1.repository.PegawaiDb;
 
 @Service
 @Transactional
-public class PegawaiServiceImpl {
+public class PegawaiServiceImpl implements PegawaiService{
     @Autowired
-    private PegawaiDb PegawaiDb;
+    private PegawaiDb pegawaiDb;
 
-    /*@Override*/
+    @Override
     public PegawaiModel getPegawaiDetailByNip(String nip) {
-        return PegawaiDb.findByNip(nip);
+        return pegawaiDb.findByNip(nip);
     }
 
-    public Optional<PegawaiModel> getPegawaiDetailById(Long id) {
-        return PegawaiDb.findById(id);
-    }
-    
-    
-    /*@Override*/
+    @Override
     public void addPegawai(PegawaiModel pegawai){
-        PegawaiDb.save(pegawai);
+        pegawaiDb.save(pegawai);
     }
 
- /*   //@Override
+    @Override
     public List<PegawaiModel> getAllPegawai(){
-        return PegawaiDb.findAll();
-    }*/
-    
-    //@Autowired
-	public void deletePegawai(PegawaiModel pegawai) {
-    	PegawaiDb.save(pegawai);
+        return pegawaiDb.findAll();
     }
 
-    //@Override
-	public int countGaji(PegawaiModel pegawai) {
-		
-		double gaji = 0;
-		
-		InstansiModel instansi = pegawai.getInstansi();
-		ProvinsiModel provinsi = instansi.getProvinsi();
-		double persentase = provinsi.getPresentaseTunjangan();
-		
-		for(JabatanModel jabatan : pegawai.getJabatanList()) {
-			if(jabatan.getGajiPokok() > gaji) {
-				gaji = jabatan.getGajiPokok();
-			
-			}
-		}
-		gaji += persentase/100* gaji;
-		
-		return (int)gaji;
-		
-	}    
-    
-    //@Override
-    public double getGajiLengkapByNip(String nip) {
-        double gajiLengkap = 0;
-        
-        PegawaiModel pegawai = this.getPegawaiDetailByNip(nip);
-        
-        double gajiTerbesar = 0;
-        for (JabatanModel jabatan:pegawai.getJabatanList()) {
-            if (jabatan.getGajiPokok() > gajiTerbesar) {
-                gajiTerbesar = jabatan.getGajiPokok();
-            }
-        }
-        System.out.println("Pokok: " + gajiTerbesar);
-        gajiLengkap += gajiTerbesar;
-        double presentaseTunjangan = pegawai.getInstansi().getProvinsi().getPresentaseTunjangan();
-        System.out.println("Presentase: " + presentaseTunjangan);
-        gajiLengkap += (gajiLengkap * presentaseTunjangan/100);
-        System.out.println("Lengkap: " + gajiLengkap);
-        return gajiLengkap;
-    }
-
-    //@Override
+    @Override
     public List<PegawaiModel> findByInstansiOrderByTanggalLahirAsc(InstansiModel instansi){
-        return PegawaiDb.findByInstansiOrderByTanggalLahirAsc(instansi);
-    }	
-	
-	/*private List<PegawaiModel> archivePegawai;
-*/
+        return pegawaiDb.findByInstansiOrderByTanggalLahirAsc(instansi);
+    }
 }
